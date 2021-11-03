@@ -4,7 +4,7 @@ public class elettore{
 
     String nome;
     String cognome;
-    Data nascita;
+    data nascita;
     boolean diritto_voto;
 
     public elettore (String nome, String cognome, int giorno, int mese, int anno, boolean diritto_voto){
@@ -23,7 +23,7 @@ public class elettore{
         return this.cognome;
     }
 
-    public Data getNascita(){
+    public data getNascita(){
         return this.nascita;
     }
 
