@@ -4,14 +4,16 @@ public class elettore{
 
     String nome;
     String cognome;
-    data nascita;
+    data nascita= new data();
     boolean diritto_voto;
 
     public elettore (String nome, String cognome, int giorno, int mese, int anno, boolean diritto_voto){
 
         this.nome= nome;
         this.cognome=cognome;
-        this.nascita(giorno,mese,anno);
+        this.nascita.setGiorno(giorno);
+        this.nascita.setMese(mese);
+        this.nascita.setAnno(anno);
         this.diritto_voto=diritto_voto;
     }
 

@@ -6,20 +6,26 @@ public class data {
 	int mese;
 	int anno;
 
-	public data(int giorno, int mese, int anno) {
-	
-		this.giorno = giorno;
-		this.mese = mese;
-		this.anno = anno;
-		
-	}
+	public data() {}
 
+	public void setGiorno(int giorno){
+		this.giorno=giorno;
+	}
+	
 	public int getGiorno() {
 		return giorno;
+	}
+	
+	public void setMese(int mese){
+		this.mese=mese;
 	}
 
 	public int getMese() {
 		return mese;
+	}
+
+	public void setAnno(int anno){
+		this.anno=anno;
 	}
 
 
