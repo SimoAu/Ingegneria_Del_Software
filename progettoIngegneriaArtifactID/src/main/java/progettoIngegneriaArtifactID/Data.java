@@ -1,12 +1,12 @@
 package progettoIngegneriaArtifactID;
 
-public class data {
+public class Data {
 	
 	int giorno;
 	int mese;
 	int anno;
 
-	public data() {}
+	public Data() {}
 
 	public void setGiorno(int giorno){
 		this.giorno=giorno;

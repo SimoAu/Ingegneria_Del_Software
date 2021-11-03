@@ -1,13 +1,13 @@
 package progettoIngegneriaArtifactID;
 
-public class elettore{
+public class Elettore{
 
     String nome;
     String cognome;
-    data nascita= new data();
+    Data nascita= new Data();
     boolean diritto_voto;
 
-    public elettore (String nome, String cognome, int giorno, int mese, int anno, boolean diritto_voto){
+    public Elettore (String nome, String cognome, int giorno, int mese, int anno, boolean diritto_voto){
 
         this.nome= nome;
         this.cognome=cognome;
@@ -25,7 +25,7 @@ public class elettore{
         return this.cognome;
     }
 
-    public data getNascita(){
+    public Data getNascita(){
         return this.nascita;
     }
 
