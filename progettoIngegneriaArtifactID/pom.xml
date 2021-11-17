@@ -3,5 +3,13 @@
   <groupId>progettoIngegneriaGroupID</groupId>
   <artifactId>progettoIngegneriaArtifactID</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>Sistema_Voto_Elettronico</name>
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations-java5</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <name>Sistema_Voto_Elettronico</name>
 </project>
