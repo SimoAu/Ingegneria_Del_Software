@@ -2,6 +2,12 @@ package progettoIngegneriaArtifactID;
 
 public class Elettore{
 
+	//@ public invariant nome != null;  
+	//@ public invariant cognome != null;
+	//@ public invariant sesso == M || sesso == F;
+	//@ public invariant nazione = italia ==> comune != null    
+	
+	
     String nome;
     String cognome;
     Data nascita= new Data();
@@ -25,7 +31,9 @@ public class Elettore{
         for (int i=0; i<16 ; i++) { this.codiceF[i] = codiceF[i]; }
         this.diritto_voto= this.nascita.isAdult();
     }
-
+    
+    
+    
     public String getNome(){
         return this.nome;
     }
@@ -50,12 +58,17 @@ public class Elettore{
 
     public char[] getCodiceF() { return codiceF; }
 
+    //@ requires voto == false;
+    //@ ensures voto == true && diritto_voto == true;
+    
+    
     public void esprimi_Voto() {
 
-        if(diritto_voto==true){
+        if(diritto_voto==true && voto == false){
 
             this.voto= true;
         }
+        
     }
 
 }
