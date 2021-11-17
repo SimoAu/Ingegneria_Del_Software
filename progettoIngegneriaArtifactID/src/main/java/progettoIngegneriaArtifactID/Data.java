@@ -36,7 +36,7 @@ public class Data {
 	}
 	
 	//@ requires (calendario.YEAR < anno) || ((calendario.YEAR == anno) && (calendario.MONTH < mese)) || ((calendario.YEAR == anno) && (calendario.MONTH == mese) && (calendario.DAY_OF_MONTH <= giorno)); 
-	//@ ensures (/result == true) ==> ((calendario.YEAR-anno)>18 || ((calendario.YEAR-anno)==18 && ((calendario.MONTH-mese)>0 || ((calendario.MONTH-mese)==0 && calendario.DAY_OF_MONTH-giorno)>=0));
+	//@ ensures (\result == true) ==> ((calendario.YEAR-anno)>18 || ((calendario.YEAR-anno)==18 && ((calendario.MONTH-mese)>0 || ((calendario.MONTH-mese)==0 && calendario.DAY_OF_MONTH-giorno)>=0));
 	
 	public boolean isAdult(){
 

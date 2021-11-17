@@ -3,11 +3,10 @@ package progettoIngegneriaArtifactID;
 import java.util.Random;
 
 public class Elettore{
-
+	
 	//@ public invariant nome != null;  
 	//@ public invariant cognome != null;
-	//@ public invariant sesso == M || sesso == F;
-	//@ public invariant nazione = italia ==> comune != null    
+	 
 	
 
 
@@ -21,6 +20,19 @@ public class Elettore{
     boolean voto;
     boolean diritto_voto;
 
+    //@ requires sesso == M || sesso == F;
+  	//@ requires nazione = italia ==> comune != null;
+    //@ ensures cognome.length() >= 3 ==> (forall int i; i >= 0 && i < 3 ; cognome.contain( codiceF[i] ));
+    //@ ensure nome.length() >= 3 ==> (forall int i; i >= 3 && i < 6 ; nome.contain( codiceF[i] ));
+    //@ ensure codiceF[6] == (char)((anno%100)/10) && this.codiceF[7] == (char)(anno%10);                                                                                                                                                                                                                                     
+    //@ ensure (codiceF[8] == 'A' && mese == 1) || (codiceF[8] == 'B' && mese == 2) || (codiceF[8] == 'C' && mese == 3) || (codiceF[8] == 'D' && mese == 4) || (codiceF[8] == 'E' && mese == 5) || (codiceF[8] == 'H' && mese == 6) || (codiceF[8] == 'L' && mese == 7) || (codiceF[8] == 'M' && mese == 8) || (codiceF[8] == 'P' && mese == 9) || (codiceF[8] == 'R' && mese == 10) || (codiceF[8] == 'S' && mese == 11) || (codiceF[8] == 'T' && mese == 12);
+    //@ ensure (Character.toUpperCase(sesso)=='F' ==> codiceF[9]= (char)((giorno/10)+40)) && codiceF[10]= (char)(giorno%10);
+    //@ ensure (Character.toUpperCase(sesso)=='M' ==> codiceF[9] = (char) (giorno / 10)) && codiceF[10]= (char)(giorno%10);
+    //@ ensure (nazione!= "Italia" && nazione!= "italia" && nazione!= "ITALIA") ==> codiceF[11]= 'Z';
+    //@ ensure (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA") ==> codiceF[11].isLetter();
+    //@ ensure codiceF[12].isDigit() && codiceF[13].isDigit() && codiceF[14].isDigit();
+    //@ ensure codiceF[15].isLetter();
+    
     public Elettore ( String nome, String cognome, int giorno, int mese, int anno, String nazione, String comune, char sesso){
 
         if(nome.contains(",")){
@@ -140,11 +152,13 @@ public class Elettore{
 
         //i caratteri alfanumerici successivi (ad eccezione della della 'Z' in caso di stranieri) sono scelti in maniera casuale
         Random rn = new Random();
-        if (nazione!= "Italia" || nazione!= "italia" || nazione!= "ITALIA"){
-            this.codiceF[11]='Z';
+        if (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA"){
+        	this.codiceF[11]= mesi_fiscali [(rn.nextInt() %10)+1];
         }
         else{
-            this.codiceF[11]= mesi_fiscali [(rn.nextInt() %10)+1];
+        	
+        	this.codiceF[11]='Z';
+            
         }
         this.codiceF[12]=(char) (rn.nextInt() %10);
         this.codiceF[13]=(char) (rn.nextInt() %10);
