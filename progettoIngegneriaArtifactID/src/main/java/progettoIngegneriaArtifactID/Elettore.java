@@ -33,29 +33,25 @@ public class Elettore{
     // solo se è di nazionalità italiana deve essere riportato il comune e quindi non essere nullo
     //@ requires nazione = italia ==> comune != null;
     
-    
-    //@ ensures cognome.length() >= 3 ==> (forall int i; i >= 0 && i < 3 ; cognome.contain( codiceF[i] ));
-    //@ ensure nome.length() >= 3 ==> (forall int i; i >= 3 && i < 6 ; nome.contain( codiceF[i] ));
-    
     // controlliamo che il settimo carattere siano le decinde dell'anno di nascita ( Compreso lo zero ) e allo stesso tempo che l'ottavo rappresenti le unità 
-    //@ ensure codiceF[6] == (char)((anno%100)/10) && this.codiceF[7] == (char)(anno%10);                                                                                                                                                                                                                                     
+    //@ ensure codiceF[6] == (char)(48+((anno%100)/10)) && this.codiceF[7] == (char)(48+(anno%10));
     
     // controlliamo che al mese di nascita corrisponda la lettera assegnata dal ministero
     //@ ensure (codiceF[8] == 'A' && mese == 1) || (codiceF[8] == 'B' && mese == 2) || (codiceF[8] == 'C' && mese == 3) || (codiceF[8] == 'D' && mese == 4) || (codiceF[8] == 'E' && mese == 5) || (codiceF[8] == 'H' && mese == 6) || (codiceF[8] == 'L' && mese == 7) || (codiceF[8] == 'M' && mese == 8) || (codiceF[8] == 'P' && mese == 9) || (codiceF[8] == 'R' && mese == 10) || (codiceF[8] == 'S' && mese == 11) || (codiceF[8] == 'T' && mese == 12);
     
     // controlliamo in caso di sesso femminile che il decimo carattere rappresenti le decine del giorno di nascita + 4 e l'undicesimo le unità 
-    //@ ensure (Character.toUpperCase(sesso)=='F' ==> codiceF[9]= (char)((giorno/10)+4)) && codiceF[10]= (char)(giorno%10);
+    //@ ensure (Character.toUpperCase(sesso)=='F' ==> codiceF[9]==(char)(48+((giorno/10)+4))) && codiceF[10]== (char)(48+(giorno%10));
    
     // controlliamo in caso di sesso maschile che il decimo carattere rappresenti le decine del giorno di nascita e l'undicesimo le unità 
-    //@ ensure (Character.toUpperCase(sesso)=='M' ==> codiceF[9] = (char) (giorno / 10)) && codiceF[10]= (char)(giorno%10);
+    //@ ensure (Character.toUpperCase(sesso)=='M' ==> codiceF[9] == (char) (48+(giorno / 10)) && codiceF[10]== (char)(48+(giorno%10));
     
     // controlliamo che nel caso di nazionalità straniera il dodicesimo carattere sia uguale a Z, mentre se italiana controlliamo solo che sia una lettera
-    //@ ensure (nazione!= "Italia" && nazione!= "italia" && nazione!= "ITALIA") ==> codiceF[11]= 'Z';
-    //@ ensure (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA") ==> (codiceF[11].isLetter() && codiceF[11] != 'Z');
+    //@ ensure (!nazione.equals("Italia") && !nazione.equals("italia") && !nazione.equals("ITALIA")) ==> codiceF[11]= 'Z';
+    //@ ensure (nazione.equals("Italia") || nazione.equals("italia") || nazione.equals("ITALIA")) ==> (codiceF[11].isLetter() && codiceF[11] != 'Z');
     
     // controllo semplificato del fatto che le lettere e i numeri compaiono nella corretta posizione
-    //@ ensure codiceF[12].isDigit() && codiceF[13].isDigit() && codiceF[14].isDigit();
-    //@ ensure codiceF[15].isLetter();
+    //@ ensure Character.isDigit(codiceF[12])&& Character.isDigit(codiceF[13]) && Character.isDigit(codiceF[14]);
+    //@ ensure Character.isLetter(codiceF[15]);
     
     public Elettore ( String nome, String cognome, int giorno, int mese, int anno, String nazione, String comune, char sesso){
 
@@ -175,7 +171,7 @@ public class Elettore{
         //i caratteri alfanumerici successivi (ad eccezione della della 'Z' in caso di stranieri) sono scelti in maniera casuale
         // ( nel caso di quelli alfabetici abbiamo sfruttato l'array precedente in modo da escludere anche la Z )
         Random rn = new Random();
-        if (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA"){
+        if (nazione.equals("Italia") || nazione.equals("italia") || nazione.equals("ITALIA")){
         	this.codiceF[11]= mesi_fiscali [(int)(pow(rn.nextInt(),2)) %10];
         }
         else{

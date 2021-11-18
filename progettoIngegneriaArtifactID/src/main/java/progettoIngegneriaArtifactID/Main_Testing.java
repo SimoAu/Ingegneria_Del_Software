@@ -1,12 +1,21 @@
 package progettoIngegneriaArtifactID;
 
+import java.util.Calendar;
+
 public class Main_Testing {
 
     private static boolean isVocal(char c){
         return (Character.toUpperCase(c)=='A' || Character.toUpperCase(c)=='E' ||Character.toUpperCase(c)=='O' ||Character.toUpperCase(c)=='I' || Character.toUpperCase(c)=='U');
     }
 
+
+    //@ ensures cognome.length() >= 3 ==> (forall int i; i >= 0 && i < 3 ; cognome.contain( cf_cognome[i] ));
+
+
     public static boolean controlloCognome(char[] cf_cognome, String cognome){
+
+        if(cognome==null)
+            return false;
 
         switch (cognome.length()){
 
@@ -57,7 +66,7 @@ public class Main_Testing {
         return true;
     }
 
-    public static boolean MolteCons (String nome){
+    public static boolean molteCons (String nome){
         int x=0;
         for(int i=0; i<nome.length(); i++){
             if (!isVocal(Character.toUpperCase(nome.charAt(i))))
@@ -66,7 +75,11 @@ public class Main_Testing {
         return x>3;
     }
 
+    //@ ensure nome.length() >= 3 ==> (forall int i; i >= 3 && i < 6 ; nome.contain( cf_nome[i] ));
     public static boolean controlloNome(char[] cf_nome, String nome) {
+
+        if(nome==null)
+            return false;
 
         switch (nome.length()) {
 
@@ -83,7 +96,7 @@ public class Main_Testing {
             default:
                 int posizione_last_cons=0 , posizione_Last_voc=0;
 
-                if (!MolteCons(nome)) {
+                if (!molteCons(nome)) {
                     for (int i = 3; i < 6; i++) {
                         if (!isVocal(cf_nome[i])) {
                             for (int j = posizione_last_cons; j < nome.length(); j++) {
@@ -138,6 +151,51 @@ public class Main_Testing {
         }
         return true;
     }
+
+    public static boolean controlloSesso(char sesso){
+        return (Character.toUpperCase(sesso)=='M' || Character.toUpperCase(sesso)=='F');
+    }
+
+    public static boolean controlloNazione(char[] cf_nazione,String nazione, String comune){
+
+        if(nazione.equals("Italia") || nazione.equals("italia") || nazione.equals("ITALIA"))
+            return (comune!= null && Character.isLetter(cf_nazione[11]));
+
+        else
+            return   cf_nazione[11]== 'Z';
+
+    }
+
+    public static boolean controlloAnno(char[] cf_anno, int anno){
+       return (cf_anno[6] == (char)(48+((anno%100)/10)) && cf_anno[7] == (char)(48+(anno%10)));
+    }
+
+    public static boolean controlloMese(char[] cf_mese, int mese){
+
+        return (cf_mese[8] == 'A' && mese == 1) || (cf_mese[8] == 'B' && mese == 2) || (cf_mese[8] == 'C' && mese == 3) || (cf_mese[8] == 'D' && mese == 4) || (cf_mese[8] == 'E' && mese == 5) || (cf_mese[8] == 'H' && mese == 6) || (cf_mese[8] == 'L' && mese == 7) || (cf_mese[8] == 'M' && mese == 8) || (cf_mese[8] == 'P' && mese == 9) || (cf_mese[8] == 'R' && mese == 10) || (cf_mese[8] == 'S' && mese == 11) || (cf_mese[8] == 'T' && mese == 12);
+    }
+
+    public static boolean controlloGiorno(char[] cf_giorno, int giorno, char sesso){
+        if (Character.toUpperCase(sesso)== 'F')
+            return (cf_giorno[9]== (char)(48+((giorno/10)+4)) && cf_giorno[10]== (char)(48+(giorno%10)));
+        else
+            return (cf_giorno[9]== (char)(48+(giorno/10)) && cf_giorno[10]== (char)(48+(giorno%10)));
+    }
+
+    public static boolean controlloUltimiValori(char[] cf){
+
+        return Character.isDigit(cf[12])&& Character.isDigit(cf[13]) && Character.isDigit(cf[14]) && Character.isLetter(cf[15]);
+    }
+
+
+    static Calendar calendario= Calendar.getInstance();
+    //controlliamo che la data inserita non sia quella presente o futura
+    //@ requires (calendario.YEAR < data_ins.anno) || ((calendario.YEAR == data_ins.anno) && (calendario.MONTH < data_ins.mese)) || ((calendario.YEAR == data_ins.anno) && (calendario.MONTH == data_ins.mese) && (calendario.DAY_OF_MONTH <= data_ins.giorno));
+    public static boolean controlloData(Data data_ins){
+        return (calendario.YEAR < data_ins.anno) || ((calendario.YEAR == data_ins.anno) && (calendario.MONTH < data_ins.mese)) || ((calendario.YEAR == data_ins.anno) && (calendario.MONTH == data_ins.mese) && (calendario.DAY_OF_MONTH <= data_ins.giorno));
+    }
+
+
 
 
 
