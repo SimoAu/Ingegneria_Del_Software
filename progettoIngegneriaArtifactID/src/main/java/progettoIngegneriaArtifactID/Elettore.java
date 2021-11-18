@@ -2,6 +2,8 @@ package progettoIngegneriaArtifactID;
 
 import java.util.Random;
 
+import static java.lang.Math.pow;
+
 public class Elettore{
 	
 	
@@ -111,7 +113,6 @@ public class Elettore{
         // per il nome dobbiamo fare il ciclo 4 volte in modo da controllare che nel caso ci sia una quarta consonante, io prenda la prima,
         // la terza e la quarta consonante per il nome
         for(int k=3; k<7; k++){
-        	
         	// controllo le consonanti salvandomi la posizione per evitare di ripetermi
         	for (int i=cons; i<nome.length() ; i++) {
         		if (!isVocal(nome.charAt(i))) {
@@ -125,7 +126,7 @@ public class Elettore{
         			
         			// in caso non sia la quarta consonante funziona come per i cognomi
         			else{
-        				this.codiceF[k] = nome.charAt(i);
+        				this.codiceF[k] = Character.toUpperCase(nome.charAt(i));
         			}
         			cons=i+1;
         			i=nome.length();
@@ -134,26 +135,26 @@ public class Elettore{
         	}
         	
         	// funziona esattamente come il cognome tranne per il controllo per essere sicuri di non stare ancora cercando la quarta consonante
-        	if( this.codiceF[k] == '\0' && k<5 ){
+        	if( this.codiceF[k] == '\0' && k<6 ){
         		for (int j=voca; j<nome.length() ; j++) {
         			if (isVocal(nome.charAt(j))) {
-        				this.codiceF[k] = nome.charAt(j);
+        				this.codiceF[k] = Character.toUpperCase(nome.charAt(j));
         				voca=j+1;
         				j=nome.length();
         			}
         		}
         	}
         	
-        	if( this.codiceF[k] == '\0' && k<5 ){
+        	if( this.codiceF[k] == '\0' && k<6 ){
         		this.codiceF[k] = 'X';
         	}
         }
         
         // per ottenere il valore delle decine dell'anno di nascita prendo il resto di 100 e lo divido per 10
-        this.codiceF[6]= (char)((anno%100)/10);
+        this.codiceF[6]= (char)(48+((anno%100)/10));
         
         // per ottenere le unità dell'anno prendo il resto di 10
-        this.codiceF[7]= (char)(anno%10);
+        this.codiceF[7]= (char)(48+(anno%10));
        
         // dato che i mesi non vengono salvati esattamente in ordine alfabetico ma alcune lettere vengono saltate ci siamo salvati
         // un array ordinato con le lettere rappresentanti i mesi
@@ -164,28 +165,28 @@ public class Elettore{
         // facciamo un controllo del sesso in quanto nel caso di sesso femminile al giorno di nascita va sommato 40
         // ( in caso maschile non va sommato nulla ) prima di prendere le decine ( tramite divisione per 10 ) e le unità ( tramite resto di 10 )
         if(Character.toUpperCase(sesso)=='F'){
-            this.codiceF[9]= (char)((giorno/10)+4);
+            this.codiceF[9]= (char)(48+((giorno/10)+4));
         }
         if(Character.toUpperCase(sesso)=='M') {
-            this.codiceF[9] = (char) (giorno / 10);
+            this.codiceF[9] = (char) (48+(giorno / 10));
         }
-        this.codiceF[10]= (char)(giorno%10);
+        this.codiceF[10]= (char)(48+(giorno%10));
 
         //i caratteri alfanumerici successivi (ad eccezione della della 'Z' in caso di stranieri) sono scelti in maniera casuale
         // ( nel caso di quelli alfabetici abbiamo sfruttato l'array precedente in modo da escludere anche la Z )
         Random rn = new Random();
         if (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA"){
-        	this.codiceF[11]= mesi_fiscali [(rn.nextInt() %10)+1];
+        	this.codiceF[11]= mesi_fiscali [(int)(pow(rn.nextInt(),2)) %10];
         }
         else{
         	
         	this.codiceF[11]='Z';
             
         }
-        this.codiceF[12]=(char) (rn.nextInt() %10);
-        this.codiceF[13]=(char) (rn.nextInt() %10);
-        this.codiceF[14]=(char) (rn.nextInt() %10);
-        this.codiceF[15]= mesi_fiscali [(rn.nextInt() %10)+1];
+        this.codiceF[12]=(char) (48+(pow(rn.nextInt(),2) %10));
+        this.codiceF[13]=(char) (48+(pow(rn.nextInt(),2) %10));
+        this.codiceF[14]=(char) (48+(pow(rn.nextInt(),2) %10));
+        this.codiceF[15]= mesi_fiscali [(int)(pow(rn.nextInt(),2)) %10];
 
         this.diritto_voto= this.nascita.isAdult();
     }
