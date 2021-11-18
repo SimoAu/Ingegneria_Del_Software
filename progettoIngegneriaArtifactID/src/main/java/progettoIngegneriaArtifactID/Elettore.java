@@ -4,13 +4,9 @@ import java.util.Random;
 
 public class Elettore{
 	
-	//@ public invariant nome != null;  
-	//@ public invariant cognome != null;
-	 
 	
-
-
-    String nome;
+	 
+	String nome;
     String cognome;
     Data nascita= new Data();
     String nazione;
@@ -20,16 +16,37 @@ public class Elettore{
     boolean voto;
     boolean diritto_voto;
 
+    // il nome e il cognome devono avere un valore e quindi non essere nulli
+    //@ requires nome != null;  
+  	//@ requires cognome != null;
+    
+    // il sesso può avere solo valore maschio (M) o femmina (F) e di non può essere nullo
     //@ requires sesso == M || sesso == F;
-  	//@ requires nazione = italia ==> comune != null;
+  	
+    // solo se è di nazionalità italiana deve essere riportato il comune e quindi non essere nullo
+    //@ requires nazione = italia ==> comune != null;
+    
+    
     //@ ensures cognome.length() >= 3 ==> (forall int i; i >= 0 && i < 3 ; cognome.contain( codiceF[i] ));
     //@ ensure nome.length() >= 3 ==> (forall int i; i >= 3 && i < 6 ; nome.contain( codiceF[i] ));
+    
+    // controlliamo che il settimo carattere siano le decinde dell'anno di nascita ( Compreso lo zero ) e allo stesso tempo che l'ottavo rappresenti le unità 
     //@ ensure codiceF[6] == (char)((anno%100)/10) && this.codiceF[7] == (char)(anno%10);                                                                                                                                                                                                                                     
+    
+    // controlliamo che al mese di nascita corrisponda la lettera assegnata dal ministero
     //@ ensure (codiceF[8] == 'A' && mese == 1) || (codiceF[8] == 'B' && mese == 2) || (codiceF[8] == 'C' && mese == 3) || (codiceF[8] == 'D' && mese == 4) || (codiceF[8] == 'E' && mese == 5) || (codiceF[8] == 'H' && mese == 6) || (codiceF[8] == 'L' && mese == 7) || (codiceF[8] == 'M' && mese == 8) || (codiceF[8] == 'P' && mese == 9) || (codiceF[8] == 'R' && mese == 10) || (codiceF[8] == 'S' && mese == 11) || (codiceF[8] == 'T' && mese == 12);
-    //@ ensure (Character.toUpperCase(sesso)=='F' ==> codiceF[9]= (char)((giorno/10)+40)) && codiceF[10]= (char)(giorno%10);
+    
+    // controlliamo in caso di sesso femminile che il decimo carattere rappresenti le decine del giorno di nascita + 4 e l'undicesimo le unità 
+    //@ ensure (Character.toUpperCase(sesso)=='F' ==> codiceF[9]= (char)((giorno/10)+4)) && codiceF[10]= (char)(giorno%10);
+   
+    // controlliamo in caso di sesso maschile che il decimo carattere rappresenti le decine del giorno di nascita e l'undicesimo le unità 
     //@ ensure (Character.toUpperCase(sesso)=='M' ==> codiceF[9] = (char) (giorno / 10)) && codiceF[10]= (char)(giorno%10);
+    
+    // controlliamo che nel caso di nazionalità straniera il dodicesimo carattere sia uguale a Z, mentre se italiana controlliamo solo che sia una lettera
     //@ ensure (nazione!= "Italia" && nazione!= "italia" && nazione!= "ITALIA") ==> codiceF[11]= 'Z';
-    //@ ensure (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA") ==> codiceF[11].isLetter();
+    //@ ensure (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA") ==> (codiceF[11].isLetter() && codiceF[11] != 'Z');
+    
+    // controllo semplificato del fatto che le lettere e i numeri compaiono nella corretta posizione
     //@ ensure codiceF[12].isDigit() && codiceF[13].isDigit() && codiceF[14].isDigit();
     //@ ensure codiceF[15].isLetter();
     
@@ -49,108 +66,101 @@ public class Elettore{
         this.nazione= nazione;
         this.comune= comune;
         this.sesso= sesso;
-        switch (cognome.length()){
-
-            case 1:
-                this.codiceF[0]=Character.toUpperCase(cognome.charAt(0));
-                this.codiceF[1]='X';
-                this.codiceF[2]='X';
-                break;
-
-            case 2:
-                this.codiceF[0]=Character.toUpperCase(cognome.charAt(0));
-                this.codiceF[1]=Character.toUpperCase(cognome.charAt(1));
-                this.codiceF[2]='X';
-                break;
-
-            default:
-                int cons=0, voca=0;
-                    for(int k=0; k<3; k++){
-                         for (int i=cons; i<cognome.length() ; i++) {
-                            if (Character.toUpperCase(cognome.charAt(i)) != 'A' || Character.toUpperCase(cognome.charAt(i)) != 'I' || Character.toUpperCase(cognome.charAt(i)) != 'O' || Character.toUpperCase(cognome.charAt(i)) != 'E' || Character.toUpperCase(cognome.charAt(i)) != 'U') {
-                                   this.codiceF[k] = Character.toUpperCase(cognome.charAt(i));
-                                 cons=i+1;
-                                 i=cognome.length();
-                             }
-                             if(i+1==cognome.length()){
-                              for (int j=voca; j<cognome.length() ; j++) {
-                                     if (Character.toUpperCase(cognome.charAt(i)) == 'A' || Character.toUpperCase(cognome.charAt(i)) == 'I' || Character.toUpperCase(cognome.charAt(i)) == 'O' || Character.toUpperCase(cognome.charAt(i)) == 'E' || Character.toUpperCase(cognome.charAt(i)) == 'U') {
-                                         this.codiceF[k] = Character.toUpperCase(cognome.charAt(j));
-                                         voca=j+1;
-                                         j=cognome.length();
-                                     }
-                              }
-                             }
-                         }
-
-
-                    }
-                    break;
-
-        }
-        switch (nome.length()){
-
-                case 1:
-                    this.codiceF[3]=Character.toUpperCase(nome.charAt(0));
-                    this.codiceF[4]='X';
-                    this.codiceF[5]='X';
-                    break;
-
-                case 2:
-                    this.codiceF[3]=Character.toUpperCase(nome.charAt(0));
-                    this.codiceF[4]=Character.toUpperCase(nome.charAt(1));
-                    this.codiceF[5]='X';
-                    break;
-
-                default:
-                    int cons=0, voca=0;
-                    char [] arrayTemp= new char [3];
-                    for(int k=0; k<4; k++){
-                        for (int i=cons; i<nome.length() ; i++) {
-                            if (Character.toUpperCase(nome.charAt(i)) != 'A' || Character.toUpperCase(nome.charAt(i)) != 'I' || Character.toUpperCase(nome.charAt(i)) != 'O' || Character.toUpperCase(nome.charAt(i)) != 'E' || Character.toUpperCase(nome.charAt(i)) != 'U') {
-                               if(k==3){
-                                   arrayTemp[1]=arrayTemp[2];
-                                   arrayTemp[2]=Character.toUpperCase(nome.charAt(i));
-                               }
-                               else{
-                                 arrayTemp[k] = nome.charAt(i);
-                               }
-                               cons=i+1;
-                               i=nome.length();
-                            }
-                            if(i+1==nome.length() && k<3){
-                                for (int j=voca; j<nome.length() ; j++) {
-                                    if (Character.toUpperCase(nome.charAt(i)) != 'A' || Character.toUpperCase(nome.charAt(i)) != 'I' || Character.toUpperCase(nome.charAt(i)) != 'O' || Character.toUpperCase(nome.charAt(i)) != 'E' || Character.toUpperCase(nome.charAt(i)) != 'U') {
-                                        arrayTemp[k] = nome.charAt(j);
-                                        voca=j+1;
-                                        j=nome.length();
-                                    }
-                                }
-                            }
-                        }
-                        this.codiceF[3]=arrayTemp[0];
-                        this.codiceF[4]=arrayTemp[1];
-                        this.codiceF[5]=arrayTemp[2];
-
-
-                    }
-                    break;
-
+        
+        // controllo i casi in cui ci siano meno di tre lettere  
+       
+        int cons=0, voca=0;
+        for(int k=0; k<3; k++){
+        	
+        	// scorro il cognome salvando nella posizione corrente la lettera nel caso sia una consonante, mi salvo la posizione della consonante per evitare di ripeterla ed esco direttamente dal ciclo
+        	for (int i=cons; i<cognome.length() ; i++) {
+               if (Character.toUpperCase(cognome.charAt(i)) != 'A' || Character.toUpperCase(cognome.charAt(i)) != 'I' || Character.toUpperCase(cognome.charAt(i)) != 'O' || Character.toUpperCase(cognome.charAt(i)) != 'E' || Character.toUpperCase(cognome.charAt(i)) != 'U') {
+            	   this.codiceF[k] = Character.toUpperCase(cognome.charAt(i));
+                   cons=i+1;
+                   i = cognome.length();
+               }
+               
             }
+        	
+        	// nel caso non abbia trovato consonanti ( e quindi la variabile corrente sia ancora vuota ) allora uso lo stesso ciclo per controllare le vocali salvandomi la posizione per non ripetermi
+        	if( this.codiceF[k] == null ){
+         	   for (int j=voca; j<cognome.length() ; j++) {
+         		   if (Character.toUpperCase(cognome.charAt(i)) == 'A' || Character.toUpperCase(cognome.charAt(i)) == 'I' || Character.toUpperCase(cognome.charAt(i)) == 'O' || Character.toUpperCase(cognome.charAt(i)) == 'E' || Character.toUpperCase(cognome.charAt(i)) == 'U') {
+         			   this.codiceF[k] = Character.toUpperCase(cognome.charAt(j));
+                        voca=j+1;
+                        j=cognome.length();
+                   }
+               }
+            }
+        	
+        	// nel caso speciale in cui non abbia trovato ulteriori vocali o consonanti ( nomi di una o due lettere ) aggiungo una X
+        	if( this.codiceF[k] == null){
+        		this.codiceF[k] = 'X';
+        	}
+        }
+        
+        cons=0; voca=0;
+        
+        // per il nome dobbiamo fare il ciclo 4 volte in modo da controllare che nel caso ci sia una quarta consonante, io prenda la prima, la terza e la quarta consonante per il nome 
+        for(int k=3; k<7; k++){
+        	
+        	// controllo le consonanti salvandomi la posizione per evitare di ripetermi
+        	for (int i=cons; i<nome.length() ; i++) {
+        		if (Character.toUpperCase(nome.charAt(i)) != 'A' || Character.toUpperCase(nome.charAt(i)) != 'I' || Character.toUpperCase(nome.charAt(i)) != 'O' || Character.toUpperCase(nome.charAt(i)) != 'E' || Character.toUpperCase(nome.charAt(i)) != 'U') {
+        			
+        			// se ho trovato una consonante e sono alla quarta iterazione del primo ciclo ( quindi è la quarta consonante del nome ) allora in quel caso sostituisco alla seconda posizione la terza consonante e inserisco la quarta in terza posizione 
+        			if(k==6){
+        				this.codiceF[4]= this.codiceF[5];
+        				this.codiceF[5]= Character.toUpperCase(nome.charAt(i));
+        			}
+        			
+        			// in caso non sia la quarta consonante funziona come per i cognomi
+        			else{
+        				this.codiceF[k] = nome.charAt(i);
+        			}
+        			cons=i+1;
+        			i=nome.length();
+        		}
+            				
+        	}
+        	
+        	// funziona esattamente come il cognome tranne per il controllo per essere sicuri di non stare ancora cercando la quarta consonante
+        	if( this.codiceF[k] == null && k<5 ){
+        		for (int j=voca; j<nome.length() ; j++) {
+        			if (Character.toUpperCase(nome.charAt(i)) != 'A' || Character.toUpperCase(nome.charAt(i)) != 'I' || Character.toUpperCase(nome.charAt(i)) != 'O' || Character.toUpperCase(nome.charAt(i)) != 'E' || Character.toUpperCase(nome.charAt(i)) != 'U') {
+        				this.codiceF[k] = nome.charAt(j);
+        				voca=j+1;
+        				j=nome.length();
+        			}
+        		}
+        	}
+        	
+        	if( this.codiceF[k] == null && k<5 ){
+        		this.codiceF[k] = 'X';
+        	}
+        }
+        
+        // per ottenere il valore delle decine dell'anno di nascita prendo il resto di 100 e lo divido per 10
         this.codiceF[6]= (char)((anno%100)/10);
+        
+        // per ottenere le unità dell'anno prendo il resto di 10
         this.codiceF[7]= (char)(anno%10);
-        char [] mesi_fiscali= {'0', 'A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T'};
-        this.codiceF[8]= mesi_fiscali[mese];
-
+       
+        // dato che i mesi non vengono salvati esattamente in ordine alfabetico ma alcune lettere vengono saltate ci siamo salvati un array ordinato con le lettere rappresentanti i mesi
+        char [] mesi_fiscali= {'A', 'B', 'C', 'D', 'E', 'H', 'L', 'M', 'P', 'R', 'S', 'T'};
+        // prendiamo la lettera corrispondente al mese - 1 poichè iniziamo a contare da zero 
+        this.codiceF[8]= mesi_fiscali[mese - 1];
+        
+        // facciamo un controllo del sesso in quanto nel caso di sesso femminile al giorno di nascita va sommato 40 ( in caso maschile non va sommato nulla ) prima di prendere le decine ( tramite divisione per 10 ) e le unità ( tramite resto di 10 ) 
         if(Character.toUpperCase(sesso)=='F'){
-            this.codiceF[9]= (char)((giorno/10)+40);
+            this.codiceF[9]= (char)((giorno/10)+4);
         }
         if(Character.toUpperCase(sesso)=='M') {
             this.codiceF[9] = (char) (giorno / 10);
         }
         this.codiceF[10]= (char)(giorno%10);
 
-        //i caratteri alfanumerici successivi (ad eccezione della della 'Z' in caso di stranieri) sono scelti in maniera casuale
+        //i caratteri alfanumerici successivi (ad eccezione della della 'Z' in caso di stranieri) sono scelti in maniera casuale ( nel caso di quelli alfabetici abbiamo sfruttato l'array precedente in modo da escludere anche la Z )
         Random rn = new Random();
         if (nazione == "Italia" || nazione== "italia" || nazione == "ITALIA"){
         	this.codiceF[11]= mesi_fiscali [(rn.nextInt() %10)+1];

@@ -35,9 +35,12 @@ public class Data {
 		return anno;
 	}
 	
+	//controlliamo che la data inserita non sia quella presente o futura
 	//@ requires (calendario.YEAR < anno) || ((calendario.YEAR == anno) && (calendario.MONTH < mese)) || ((calendario.YEAR == anno) && (calendario.MONTH == mese) && (calendario.DAY_OF_MONTH <= giorno)); 
-	//@ ensures (\result == true) ==> ((calendario.YEAR-anno)>18 || ((calendario.YEAR-anno)==18 && ((calendario.MONTH-mese)>0 || ((calendario.MONTH-mese)==0 && calendario.DAY_OF_MONTH-giorno)>=0));
 	
+	// controlliamo che l'elettore sia maggiorenne
+	//@ ensures (\result == true) ==> ((calendario.YEAR-anno)>18 || ((calendario.YEAR-anno)==18 && ((calendario.MONTH-mese)>0 || ((calendario.MONTH-mese)==0 && calendario.DAY_OF_MONTH-giorno)>=0));
+
 	public boolean isAdult(){
 
 		if((calendario.YEAR-anno)>18){ return true;}
